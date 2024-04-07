@@ -1,0 +1,64 @@
+plugins {
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    maven { url 'https://maven.wispforest.io' }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
+    include "io.wispforest:owo-sentinel:${project.owo_version}"
+    modImplementation "net.rotgruengelb:nixienaut:${project.nixienaut_version}"
+
+    modRuntimeOnly ("com.terraformersmc:modmenu:${project.modmenu_version}")
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "loader_version", project.loader_version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "owo_version", project.owo_version
+    inputs.property "nixienaut_version", project.nixienaut_version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "loader_version": project.loader_version,
+                "minecraft_version": project.minecraft_version,
+                "owo_version": project.owo_version,
+                "nixienaut_version": project.nixienaut_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+java {
+    // withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}"}
+    }
+}

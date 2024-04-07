@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "your_time",
+	"version": "${version}",
+	"name": "Your_Time",
+	"description": "Display your playtime on the in-game HUD.",
+	"authors": [
+		"rotgruengelb"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/your_time",
+		"sources": "https://github.com/rotgruengelb/your_time",
+		"issues": "https://github.com/rotgruengelb/your_time/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/your_time/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"net.rotgruengelb.your_time.Your_Time"
+		]
+	},
+	"mixins": [
+		"your_time.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "${minecraft_version}",
+		"java": ">=17",
+		"owo-lib": ">=${owo_version}",
+		"nixienaut": ">=${nixienaut_version}",
+		"fabric": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
+	}
+}
