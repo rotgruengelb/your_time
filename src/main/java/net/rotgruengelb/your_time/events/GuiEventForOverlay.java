@@ -10,11 +10,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
 import net.minecraft.stat.StatType;
 import net.minecraft.text.Text;
+import net.rotgruengelb.nixienaut.format.TimeFormatting;
 import net.rotgruengelb.your_time.Your_Time;
 import net.rotgruengelb.your_time.config.ModConfigModel;
-
-import java.util.Map;
-import java.util.Objects;
 
 public class GuiEventForOverlay {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -29,7 +27,7 @@ public class GuiEventForOverlay {
 		MatrixStack stack = drawContext.getMatrices();
 		stack.push();
 
-		String string = requestStat(Your_Time.CONFIG.timeType().statType, Your_Time.CONFIG.timeType().stat);
+		String string = requestString(Your_Time.CONFIG.timeType().statType, Your_Time.CONFIG.timeType().stat);
 		ModConfigModel.Position position = Your_Time.CONFIG.position();
 		int x = position.x;
 		int y = position.y;
@@ -49,29 +47,13 @@ public class GuiEventForOverlay {
 		drawContext.drawText(textRenderer, Text.literal(string), x, y, color, shouldDrawShadow);
 	}
 
-	private static <T> String requestStat(StatType<T> statType, T stat) {
+	private static <T> String requestString(StatType<T> statType, T stat) {
 		ClientStatusC2SPacket packet = new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS);
 		ClientPlayNetworkHandler network = client.getNetworkHandler();
 		if (network != null) {
 			network.sendPacket(packet);
 		}
-		return formatTime(client.player.getStatHandler().getStat(statType, stat));
-	}
-
-	private static String formatTime(int time) {
-		Map<String, Integer> values = Map.of("d", time / 1728000, "h", (time % 1728000) / 72000, "m", (time % 72000) / 1200, "s", (time % 1200) / 20, "tH", time / 72000, "tM", time / 1200, "tS", time / 20);
-
-		String[] format = Your_Time.CONFIG.format().split("%");
-		for (int i = 0; i < format.length; i++) {
-			if (Objects.equals(format[i], "\\")) {
-				format[i] = "%";
-				continue;
-			}
-			if (values.containsKey(format[i])) {
-				String string = values.get(format[i]).toString();
-				format[i] = "0".repeat(Math.max(0, 2 - string.length())) + string;
-			}
-		}
-		return String.join("", format);
+		return TimeFormatting.formatTime(client.player.getStatHandler()
+				.getStat(statType, stat), Your_Time.CONFIG.format());
 	}
 }
