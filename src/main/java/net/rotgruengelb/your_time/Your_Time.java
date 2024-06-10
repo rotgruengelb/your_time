@@ -14,6 +14,9 @@ public class Your_Time implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		LOGGER.warn("!!!!	Fabric API 0.100.0+1.20.6 and owo-lib 0.12.8+1.20.5 are incompatible and may result in crashes.		!!!!");
+		LOGGER.warn("!!!!	Use earlier (or later) versions of Fabric API (or owo-lib) like FAPI 0.99.4+1.20.6. 				!!!!");
+		LOGGER.warn("!!!!	If you are on different versions of either mods this might not apply. 								!!!!");
 		registerEvents();
 	}
 
