@@ -32,6 +32,6 @@
 		"fabric": "*"
 	},
 	"suggests": {
-		"modmenu": "*",
+		"modmenu": "*"
 	}
 }
