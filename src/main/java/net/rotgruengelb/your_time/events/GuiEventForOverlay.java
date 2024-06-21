@@ -5,6 +5,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.StatsScreen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
@@ -17,7 +18,7 @@ import net.rotgruengelb.your_time.config.ModConfigModel;
 public class GuiEventForOverlay {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
 
-	public static void renderOverlay(DrawContext drawContext, float tickDelta) {
+	public static void renderOverlay(DrawContext drawContext, RenderTickCounter renderTickCounter) {
 		if (!Your_Time.CONFIG.enabled()) { return; }
 		if (client.getDebugHud().shouldShowDebugHud()) { return; }
 		if (client.currentScreen instanceof StatsScreen) { return; }
