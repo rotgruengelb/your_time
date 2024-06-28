@@ -10,9 +10,9 @@
 	"text.config.your_time.enum.position.bottom_left": "Bottom Left",
 	"text.config.your_time.enum.position.bottom_right": "Bottom Right",
 	"text.config.your_time.enum.position.custom": "Custom",
-	"text.config.your_time.category.customPosition": "X & Y for Custom Position",
-	"text.config.your_time.option.customPosition.x": "X (minus goes from opposite screen end):",
-	"text.config.your_time.option.customPosition.y": "Y (minus goes from opposite screen end):",
+	"text.config.your_time.category.customPosition": "Custom Position (negative numbers wrap to opposite screen end)",
+	"text.config.your_time.option.customPosition.x": "X:",
+	"text.config.your_time.option.customPosition.y": "Y:",
 	"text.config.your_time.option.format": "Format to display time (files.rotgruengelb.net/s/your_time):",
 	"text.config.your_time.title": "Settings for Your_Time"
 }
