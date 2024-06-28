@@ -16,17 +16,20 @@ public class ModConfigModel {
 	public TimeType timeType = TimeType.TOTAL;
 	public String format = "%tH%:%m%:%s%";
 	@RegexConstraint("^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$") public String colorHex = "ffffff";
+	public boolean textShadow = true;
 	public Position position = Position.TOP_LEFT;
 	@Nest public CustomPosition customPosition = new CustomPosition();
+	public boolean freezeOnHardcoreDeath = false;
 
 	public enum TimeType {
 		TOTAL(Stats.CUSTOM, Stats.TOTAL_WORLD_TIME),
-		SESSION(Stats.CUSTOM, Stats.PLAY_TIME);
+		SESSION(Stats.CUSTOM, Stats.PLAY_TIME),
+		SINCE_DEATH(Stats.CUSTOM, Stats.TIME_SINCE_DEATH);
 
 		public final StatType<Identifier> statType;
 		public final Identifier stat;
 
-		<T> TimeType(StatType<Identifier> statType, Identifier stat) {
+		TimeType(StatType<Identifier> statType, Identifier stat) {
 			this.statType = statType;
 			this.stat = stat;
 		}

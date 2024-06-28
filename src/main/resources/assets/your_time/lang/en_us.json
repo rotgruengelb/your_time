@@ -3,7 +3,10 @@
 	"text.config.your_time.option.timeType": "Play Time to display:",
 	"text.config.your_time.enum.timeType.session": "Session",
 	"text.config.your_time.enum.timeType.total": "Total",
+	"text.config.your_time.enum.timeType.since_death": "Since Last Death",
 	"text.config.your_time.option.colorHex": "Display Color Code in Hex:",
+	"text.config.your_time.option.textShadow": "Text Shadow:",
+	"text.config.your_time.option.freezeOnHardcoreDeath": "Freeze Timer on Hardcore death:",
 	"text.config.your_time.option.position": "Display Position:",
 	"text.config.your_time.enum.position.top_left": "Top Left",
 	"text.config.your_time.enum.position.top_right": "Top Right",
@@ -13,6 +16,6 @@
 	"text.config.your_time.category.customPosition": "Custom Position (negative numbers wrap to opposite screen end)",
 	"text.config.your_time.option.customPosition.x": "X:",
 	"text.config.your_time.option.customPosition.y": "Y:",
-	"text.config.your_time.option.format": "Format to display time (files.rotgruengelb.net/s/your_time):",
+	"text.config.your_time.option.format": "Format to display time (guide on mod page):",
 	"text.config.your_time.title": "Settings for Your_Time"
 }
