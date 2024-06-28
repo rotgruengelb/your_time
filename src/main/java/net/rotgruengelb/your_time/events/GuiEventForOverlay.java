@@ -27,18 +27,33 @@ public class GuiEventForOverlay {
 		MatrixStack stack = drawContext.getMatrices();
 		stack.push();
 
-		String string = requestString(Your_Time.CONFIG.timeType().statType, Your_Time.CONFIG.timeType().stat);
-		ModConfigModel.Position position = Your_Time.CONFIG.position();
-		int x = position.x;
-		int y = position.y;
-		if (position == ModConfigModel.Position.CUSTOM) {
-			x = Your_Time.CONFIG.customPosition.x();
-			y = Your_Time.CONFIG.customPosition.y();
-		}
-		if (x < 0) { x = window.getScaledWidth() + position.x - textRenderer.getWidth(string); }
-		if (y < 0) { y = window.getScaledHeight() + position.y; }
+		final String[] strings = requestString(Your_Time.CONFIG.timeType().statType, Your_Time.CONFIG.timeType().stat).split("\\\\n");
 
-		drawText(textRenderer, drawContext, string, x, y, Integer.parseInt(Your_Time.CONFIG.colorHex(), 16), true);
+		final ModConfigModel.Position position = Your_Time.CONFIG.position();
+
+		final boolean useCustomPosition = position == ModConfigModel.Position.CUSTOM;
+		final int x = useCustomPosition ? Your_Time.CONFIG.customPosition.x() : position.x;
+		final int y = useCustomPosition ? Your_Time.CONFIG.customPosition.y() : position.y;
+
+		int yOffset = 0;
+		if (y < 0) {
+			yOffset = -10 * (strings.length - 1);
+		}
+		for (final String string : strings) {
+			int stringX = x;
+			if (x < 0) {
+				stringX = window.getScaledWidth() + x - textRenderer.getWidth(string);
+			}
+			int stringY = y;
+			if (y < 0) {
+				stringY = window.getScaledHeight() + (y + yOffset);
+			} else {
+				stringY += yOffset;
+			}
+			yOffset += 10;
+
+			drawText(textRenderer, drawContext, string, stringX, stringY, Integer.parseInt(Your_Time.CONFIG.colorHex(), 16), true);
+		}
 
 		stack.pop();
 	}
