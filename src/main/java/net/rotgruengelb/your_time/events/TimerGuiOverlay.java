@@ -20,7 +20,15 @@ import static net.rotgruengelb.your_time.Your_Time.CONFIG;
 public class TimerGuiOverlay {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
 
+	public static void renderOverlay(DrawContext drawContext, float delta) {
+		renderOverlay(drawContext);
+	}
+
 	public static void renderOverlay(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+		renderOverlay(drawContext);
+	}
+
+	public static void renderOverlay(DrawContext drawContext) {
 		if (!CONFIG.enabled()) { return; }
 		if (client.getDebugHud().shouldShowDebugHud()) { return; }
 		if (client.currentScreen instanceof StatsScreen) { return; }
