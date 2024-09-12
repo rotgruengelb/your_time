@@ -25,14 +25,13 @@ dependencies {
     annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
     include "io.wispforest:owo-sentinel:${project.owo_version}"
     modImplementation "net.rotgruengelb:nixienaut:${project.nixienaut_version}"
-
-    modRuntimeOnly ("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 processResources {
     inputs.property "version", project.version
     inputs.property "loader_version", project.loader_version
     inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "minecraft_version_range", project.minecraft_version_range
     inputs.property "owo_version", project.owo_version
     inputs.property "nixienaut_version", project.nixienaut_version
 
@@ -41,7 +40,8 @@ processResources {
                 "loader_version": project.loader_version,
                 "minecraft_version": project.minecraft_version,
                 "owo_version": project.owo_version,
-                "nixienaut_version": project.nixienaut_version
+                "nixienaut_version": project.nixienaut_version,
+                "minecraft_version_range": project.minecraft_version_range
     }
 }
 
