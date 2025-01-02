@@ -1,36 +1,56 @@
-package net.rotgruengelb.your_time.events;
+package net.rotgruengelb.your_time;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.StatsScreen;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
 import net.minecraft.stat.StatType;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.Identifier;
 import net.rotgruengelb.nixienaut.util.StringUtils;
 import net.rotgruengelb.your_time.config.ModConfigModel;
 
 import static net.rotgruengelb.your_time.Your_Time.CONFIG;
 
 public class TimerGuiOverlay {
-	private static final MinecraftClient client = MinecraftClient.getInstance();
+	public static final MinecraftClient client = MinecraftClient.getInstance();
+
+	private static boolean isDebugHudEnabled() {
+		try {
+			DebugHud debugHud = (DebugHud) client.getClass()
+					.getMethod("getDebugHud")
+					.invoke(client);
+			return (boolean) debugHud.getClass()
+					.getMethod("shouldShowDebugHud")
+					.invoke(debugHud);
+		} catch (Exception e) {
+			try {
+				return client.options.debugEnabled;
+			} catch (Exception e2) {
+				Your_Time.LOGGER.error("Failed to check if debug hud is enabled using modern method and legacy.");
+				Your_Time.LOGGER.error("\tModern method exception... ", e);
+				Your_Time.LOGGER.error("\tLegacy method exception... ", e2);
+			}
+		}
+		return false;
+	}
+
+	public static void renderOverlay(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+		renderOverlay(drawContext, renderTickCounter);
+	}
 
 	public static void renderOverlay(DrawContext drawContext, float delta) {
 		renderOverlay(drawContext);
 	}
 
-	public static void renderOverlay(DrawContext drawContext, RenderTickCounter renderTickCounter) {
-		renderOverlay(drawContext);
-	}
-
 	public static void renderOverlay(DrawContext drawContext) {
 		if (!CONFIG.enabled()) { return; }
-		if (client.getDebugHud().shouldShowDebugHud()) { return; }
+		if (isDebugHudEnabled()) { return; }
 		if (client.currentScreen instanceof StatsScreen) { return; }
 
 		final ClientPlayerEntity player = client.player;
@@ -41,7 +61,7 @@ public class TimerGuiOverlay {
 		MatrixStack stack = drawContext.getMatrices();
 		stack.push();
 
-		final String[] strings = requestTimerString(CONFIG.timeType().statType, CONFIG.timeType().stat);
+		final String[] strings = getTimerText(CONFIG.timeType().statType, CONFIG.timeType().stat);
 
 		final ModConfigModel.Position position = CONFIG.position();
 
@@ -72,21 +92,21 @@ public class TimerGuiOverlay {
 		stack.pop();
 	}
 
-	private static boolean shouldUseHardcoreFreezeTime(ClientPlayerEntity player) {
+	private static boolean shouldHardcoreDeathTimeFreeze() {
 		if (CONFIG.timeType().stat != Stats.TOTAL_WORLD_TIME) { return false; }
 		if (!CONFIG.freezeOnHardcoreDeath()) { return false; }
-		if (player.getStatHandler().getStat(Stats.CUSTOM, Stats.DEATHS) == 0) { return false; }
-		return player.clientWorld.getLevelProperties().isHardcore();
+
+		assert client.player != null;
+		if (client.player.getStatHandler()
+				.getStat(Stats.CUSTOM, Stats.DEATHS) == 0) { return false; }
+		return client.player.clientWorld.getLevelProperties()
+				.isHardcore();
 	}
 
-	private static <T> String[] requestTimerString(StatType<T> statType, T stat) {
-		ClientStatusC2SPacket packet = new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS);
-		ClientPlayNetworkHandler network = client.getNetworkHandler();
-		if (network != null) { network.sendPacket(packet); }
-		int time = client.player.getStatHandler().getStat(statType, stat);
-		if (shouldUseHardcoreFreezeTime(client.player)) {
-			time = time - client.player.getStatHandler().getStat(Stats.CUSTOM, Stats.TIME_SINCE_DEATH);
-		}
-		return StringUtils.formatTime(time, CONFIG.format()).split("\\\\n");
+	private static String[] getTimerText(StatType<Identifier> statType, Identifier stat) {
+		int time = Timer.getTime(statType, stat, shouldHardcoreDeathTimeFreeze());
+
+		return StringUtils.formatTime(time, CONFIG.format())
+				.split("\\\\n");
 	}
 }

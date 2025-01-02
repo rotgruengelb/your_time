@@ -3,7 +3,6 @@ package net.rotgruengelb.your_time;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.rotgruengelb.your_time.config.ModConfig;
-import net.rotgruengelb.your_time.events.TimerGuiOverlay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
